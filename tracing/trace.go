@@ -14,18 +14,18 @@ import (
 )
 
 // Create a new instance of Jaeger tracer
-func NewTracer(serverName string, logger log.Factory) opentracing.Tracer {
+func NewTracer(serverName string) opentracing.Tracer {
 	// todo why?
 	metricsFactory := prometheus.New().Namespace(metrics.NSOptions{Name: constants.ProjectName, Tags: nil})
 	cfg, err := config.FromEnv() // init config from environment variable
 	if err != nil {
-		logger.Bg().Fatal("parse Jaeger environment variable fail", zap.Error(err))
+		log.Bg().Fatal("parse Jaeger environment variable fail", zap.Error(err))
 	}
 	cfg.ServiceName = serverName
 	cfg.Sampler.Type = "const"
 	cfg.Sampler.Param = 1
 
-	jaegerLogger := jaegerLoggerAdapter{logger.Bg()}
+	jaegerLogger := jaegerLoggerAdapter{log.Bg()}
 
 	metricsFactory = metricsFactory.Namespace(metrics.NSOptions{Name: serverName, Tags: nil})
 	tracer, _, err := cfg.NewTracer(
@@ -34,7 +34,7 @@ func NewTracer(serverName string, logger log.Factory) opentracing.Tracer {
 		config.Observer(rpcmetrics.NewObserver(metricsFactory, rpcmetrics.DefaultNameNormalizer)),
 	)
 	if err != nil {
-		logger.Bg().Fatal("initialize Jaeger Tracer fail", zap.Error(err))
+		log.Bg().Fatal("initialize Jaeger Tracer fail", zap.Error(err))
 	}
 	return tracer
 }

@@ -9,7 +9,6 @@ type Logger interface {
 	Info(msg string, fields ...zapcore.Field)
 	Error(msg string, fields ...zapcore.Field)
 	Fatal(msg string, fields ...zapcore.Field)
-	With(fields ...zapcore.Field) Logger // create a child Logger
 }
 
 // wrap zap logger
@@ -27,8 +26,4 @@ func (l logger) Error(msg string, fields ...zapcore.Field) {
 
 func (l logger) Fatal(msg string, fields ...zapcore.Field) {
 	l.logger.Fatal(msg, fields...)
-}
-
-func (l logger) With(fields ...zapcore.Field) Logger {
-	return logger{logger: l.logger.With(fields...)}
 }
