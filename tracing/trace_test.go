@@ -20,9 +20,9 @@ func TestNewTracer(t *testing.T) {
 	opentracing.SetGlobalTracer(tracer)
 	span := tracer.StartSpan("test")
 	ctx := opentracing.ContextWithSpan(context.Background(), span)
+	defer span.Finish()
 	log.For(ctx).Info("info")
 	log.For(ctx).Error("error")
-	defer span.Finish()
 }
 
 func TestServeMux(t *testing.T) {
