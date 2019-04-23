@@ -15,15 +15,22 @@ import (
 	"go.uber.org/zap"
 )
 
+type LogEncoding string
+
+const Json LogEncoding = "json"
+const Console LogEncoding = "console"
+
 var zapLogger *zap.Logger
 
 // auto init
 func init() {
-	zapLogger, _ = zap.NewProduction()
+	cfg := zap.NewProductionConfig()
+	cfg.Encoding = string(Console) // default console
+	zapLogger, _ = cfg.Build()
 }
 
 // manual init
-func Init(outputPaths []string) (err error) {
+func Init(outputPaths []string, encode LogEncoding) (err error) {
 	// write to stdout when output path is empty
 	if len(outputPaths) == 0 {
 		outputPaths = []string{"stdout"}
@@ -42,6 +49,7 @@ func Init(outputPaths []string) (err error) {
 	}
 
 	cfg := zap.NewProductionConfig()
+	cfg.Encoding = string(encode)
 	cfg.OutputPaths = outputPaths // set output paths
 	zapLogger, err = cfg.Build()
 	return

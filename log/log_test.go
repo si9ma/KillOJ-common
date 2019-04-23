@@ -10,7 +10,7 @@ import (
 )
 
 func TestLoggerBg(t *testing.T) {
-	if err := Init([]string{}); err != nil {
+	if err := Init([]string{}, Console); err != nil {
 		t.Fatal("Init log fail", err)
 		return
 	}
@@ -20,7 +20,7 @@ func TestLoggerBg(t *testing.T) {
 }
 
 func TestLoggerBg2File(t *testing.T) {
-	if err := Init([]string{"stdout", "/tmp/log.log"}); err != nil {
+	if err := Init([]string{"stdout", "/tmp/log.log"}, Console); err != nil {
 		t.Fatal("Init log fail", err)
 		return
 	}
@@ -31,7 +31,7 @@ func TestLoggerBg2File(t *testing.T) {
 
 func TestLoggerBgDebugModeTrue(t *testing.T) {
 	_ = os.Setenv(constants.EnvDebug, "true")
-	if err := Init([]string{"/tmp/log.log"}); err != nil {
+	if err := Init([]string{"/tmp/log.log"}, Console); err != nil {
 		t.Fatal("Init log fail", err)
 		return
 	}
@@ -44,7 +44,7 @@ func TestLoggerBgDebugModeTrue(t *testing.T) {
 
 func TestLoggerBgDebugModeFalse(t *testing.T) {
 	_ = os.Setenv(constants.EnvDebug, "false")
-	if err := Init([]string{"/tmp/log.log"}); err != nil {
+	if err := Init([]string{"/tmp/log.log"}, Console); err != nil {
 		t.Fatal("Init log fail", err)
 		return
 	}
@@ -56,6 +56,18 @@ func TestLoggerBgDebugModeFalse(t *testing.T) {
 }
 
 func TestLoggerNoManualInit(t *testing.T) {
+	Bg().Info("I'm Info", zap.String("event", "test"), zap.String("level", "info"))
+	Bg().Error("I'm Error", zap.String("event", "test"), zap.String("level", "error"))
+	Bg().Fatal("I'm Fatal", zap.String("event", "test"), zap.String("level", "fatal"))
+}
+
+func TestLoggerJson(t *testing.T) {
+	if err := Init([]string{}, Json); err != nil {
+		t.Fatal("Init log fail", err)
+		return
+	}
+
+	// should write to file and stdout at the same time
 	Bg().Info("I'm Info", zap.String("event", "test"), zap.String("level", "info"))
 	Bg().Error("I'm Error", zap.String("event", "test"), zap.String("level", "error"))
 	Bg().Fatal("I'm Fatal", zap.String("event", "test"), zap.String("level", "fatal"))
