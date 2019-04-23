@@ -28,6 +28,11 @@ func (sl spanLogger) Error(msg string, fields ...zapcore.Field) {
 	sl.logger.Error(msg, fields...)
 }
 
+func (sl spanLogger) Warn(msg string, fields ...zapcore.Field) {
+	sl.logToSpan("WARN", msg, fields...)
+	sl.logger.Warn(msg, fields...)
+}
+
 func (sl spanLogger) Fatal(msg string, fields ...zapcore.Field) {
 	sl.logToSpan("FATAL", msg, fields...)
 	tag.Error.Set(sl.span, true) // set error tag

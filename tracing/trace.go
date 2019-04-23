@@ -16,10 +16,15 @@ import (
 	"go.uber.org/zap"
 )
 
+var metricsFactory metrics.Factory
+
+func init() {
+	// todo why?
+	metricsFactory = prometheus.New().Namespace(metrics.NSOptions{Name: constants.ProjectName, Tags: nil})
+}
+
 // Create a new instance of Jaeger tracer
 func NewTracer(serverName string) (opentracing.Tracer, io.Closer) {
-	// todo why?
-	metricsFactory := prometheus.New().Namespace(metrics.NSOptions{Name: constants.ProjectName, Tags: nil})
 	cfg, err := config.FromEnv() // init config from environment variable
 	if err != nil {
 		log.Bg().Fatal("parse Jaeger environment variable fail", zap.Error(err))

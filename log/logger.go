@@ -8,6 +8,7 @@ import (
 type Logger interface {
 	Info(msg string, fields ...zapcore.Field)
 	Error(msg string, fields ...zapcore.Field)
+	Warn(msg string, fields ...zapcore.Field)
 	Fatal(msg string, fields ...zapcore.Field)
 }
 
@@ -26,4 +27,8 @@ func (l logger) Error(msg string, fields ...zapcore.Field) {
 
 func (l logger) Fatal(msg string, fields ...zapcore.Field) {
 	l.logger.Fatal(msg, fields...)
+}
+
+func (l logger) Warn(msg string, fields ...zapcore.Field) {
+	l.logger.Warn(msg, fields...)
 }
