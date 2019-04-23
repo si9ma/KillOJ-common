@@ -2,6 +2,9 @@ package tracing
 
 import (
 	"fmt"
+	"io"
+
+	"github.com/uber/jaeger-client-go"
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/si9ma/KillOJ-common/constants"
@@ -14,7 +17,7 @@ import (
 )
 
 // Create a new instance of Jaeger tracer
-func NewTracer(serverName string) opentracing.Tracer {
+func NewTracer(serverName string) (opentracing.Tracer, io.Closer) {
 	// todo why?
 	metricsFactory := prometheus.New().Namespace(metrics.NSOptions{Name: constants.ProjectName, Tags: nil})
 	cfg, err := config.FromEnv() // init config from environment variable
@@ -22,13 +25,13 @@ func NewTracer(serverName string) opentracing.Tracer {
 		log.Bg().Fatal("parse Jaeger environment variable fail", zap.Error(err))
 	}
 	cfg.ServiceName = serverName
-	cfg.Sampler.Type = "const"
+	cfg.Sampler.Type = jaeger.SamplerTypeConst
 	cfg.Sampler.Param = 1
 
 	jaegerLogger := jaegerLoggerAdapter{log.Bg()}
 
 	metricsFactory = metricsFactory.Namespace(metrics.NSOptions{Name: serverName, Tags: nil})
-	tracer, _, err := cfg.NewTracer(
+	tracer, closer, err := cfg.NewTracer(
 		config.Logger(jaegerLogger),
 		config.Metrics(metricsFactory),
 		config.Observer(rpcmetrics.NewObserver(metricsFactory, rpcmetrics.DefaultNameNormalizer)),
@@ -36,7 +39,7 @@ func NewTracer(serverName string) opentracing.Tracer {
 	if err != nil {
 		log.Bg().Fatal("initialize Jaeger Tracer fail", zap.Error(err))
 	}
-	return tracer
+	return tracer, closer
 }
 
 // adapt our logger to jaeger logger
