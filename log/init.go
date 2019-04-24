@@ -2,16 +2,10 @@ package log
 
 import (
 	"context"
-	"os"
-	"strconv"
-
-	"github.com/pkg/errors"
 
 	"github.com/si9ma/KillOJ-common/utils"
 
 	"github.com/opentracing/opentracing-go"
-	"github.com/si9ma/KillOJ-common/constants"
-
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -36,15 +30,8 @@ func Init(outputPaths []string, encode LogEncoding) (err error) {
 	}
 
 	// on debug mode, write log to stdout at the same time
-	if e := os.Getenv(constants.EnvDebug); e != "" {
-		debug := false
-		if debug, err = strconv.ParseBool(e); err != nil {
-			return errors.Wrapf(err, "parse env var %s=%s fail", constants.EnvDebug, e)
-		}
-
-		if debug && !utils.ContainsString(outputPaths, "stdout") {
-			outputPaths = append(outputPaths, "stdout")
-		}
+	if utils.IsDebug() && !utils.ContainsString(outputPaths, "stdout") {
+		outputPaths = append(outputPaths, "stdout")
 	}
 
 	// config format
@@ -60,7 +47,11 @@ func Init(outputPaths []string, encode LogEncoding) (err error) {
 	cfg.Encoding = string(encode)
 	cfg.EncoderConfig = encoderCfg
 	cfg.OutputPaths = outputPaths // set output paths
-	zapLogger, err = cfg.Build()
+	if zapLogger, err = cfg.Build(); err != nil {
+		// if build fail , set zapLogger as a default logger
+		// todo There may be a bug here
+		zapLogger, _ = zap.NewProduction()
+	}
 	return
 }
 

@@ -10,6 +10,8 @@ type Logger interface {
 	Error(msg string, fields ...zapcore.Field)
 	Warn(msg string, fields ...zapcore.Field)
 	Fatal(msg string, fields ...zapcore.Field)
+	Debug(msg string, fields ...zapcore.Field)
+	Panic(msg string, fields ...zapcore.Field)
 }
 
 // wrap zap logger
@@ -31,4 +33,12 @@ func (l logger) Fatal(msg string, fields ...zapcore.Field) {
 
 func (l logger) Warn(msg string, fields ...zapcore.Field) {
 	l.logger.Warn(msg, fields...)
+}
+
+func (l logger) Debug(msg string, fields ...zapcore.Field) {
+	l.logger.Debug(msg, fields...)
+}
+
+func (l logger) Panic(msg string, fields ...zapcore.Field) {
+	l.logger.Panic(msg, fields...)
 }

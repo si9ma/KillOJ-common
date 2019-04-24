@@ -3,9 +3,12 @@ package asyncjob
 import (
 	"context"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/si9ma/KillOJ-common/constants"
+
+	"github.com/RichardKnop/machinery/v1"
 
 	"github.com/si9ma/KillOJ-common/log"
 	"go.uber.org/zap"
@@ -20,7 +23,7 @@ import (
 func TestConfig_String(t *testing.T) {
 	cfg := defaultConfig()
 	cfg.Broker = "amqp://si9ma:rabbitmq@localhost:5672/"
-	if err := Init(cfg); err != nil {
+	if _, err := Init(cfg); err != nil {
 		t.Fatal("Init server fail", err)
 	}
 }
@@ -28,7 +31,10 @@ func TestConfig_String(t *testing.T) {
 func TestSender(t *testing.T) {
 	cfg := defaultConfig()
 	cfg.Broker = "amqp://si9ma:rabbitmq@localhost:5672/"
-	if err := Init(cfg); err != nil {
+	cfg.BindingKey = strings.Join([]string{constants.ProjectName, "Judge", "Queue"}, "_")
+	var server *machinery.Server
+	var err error
+	if server, err = Init(cfg); err != nil {
 		t.Fatal("Init server fail", err)
 	}
 
@@ -44,10 +50,10 @@ func TestSender(t *testing.T) {
 		log.For(ctx).Info("batch", zap.String("batch.id", batchID))
 
 		judgeTask := tasks.Signature{
-			Name: "test",
+			Name: "judge",
 		}
 
-		_, err := Server().SendTaskWithContext(ctx, &judgeTask)
+		_, err := server.SendTaskWithContext(ctx, &judgeTask)
 		if err != nil {
 			t.Fatal("send task fail", err)
 		}
@@ -58,21 +64,23 @@ func TestSender(t *testing.T) {
 func TestWorker(t *testing.T) {
 	cfg := defaultConfig()
 	cfg.Broker = "amqp://si9ma:rabbitmq@localhost:5672/"
-	if err := Init(cfg); err != nil {
+	var server *machinery.Server
+	var err error
+	if server, err = Init(cfg); err != nil {
 		t.Fatal("Init server fail", err)
 	}
 	tracer, closer := tracing.NewTracer("test_worker")
 	opentracing.SetGlobalTracer(tracer)
 	defer closer.Close()
 
-	if err := Server().RegisterTask("test", func() error {
+	if err := server.RegisterTask("test", func() error {
 		fmt.Println("I a test worker!")
 		return nil
 	}); err != nil {
 		t.Fatal()
 	}
 
-	if err := Server().NewCustomQueueWorker("test", 3, constants.ProjectName).Launch(); err != nil {
+	if err := server.NewWorker("test", 1).Launch(); err != nil {
 		t.Fatal("launch worker fail", err)
 	}
 }

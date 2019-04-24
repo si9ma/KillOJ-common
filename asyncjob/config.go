@@ -26,10 +26,10 @@ func (c Config) String() string {
 func defaultConfig() Config {
 	return Config{
 		Broker:        "amqp://guest:guest@localhost:5672/",
-		DefaultQueue:  strings.Join([]string{constants.ProjectName, "queue"}, "_"),
-		Exchange:      strings.Join([]string{constants.ProjectName, "exchange"}, "_"),
+		DefaultQueue:  strings.Join([]string{constants.ProjectName, "Queue"}, "_"),
+		Exchange:      strings.Join([]string{constants.ProjectName, "Exchange"}, "_"),
 		ExchangeType:  "direct",
-		BindingKey:    strings.Join([]string{constants.ProjectName, "queue"}, "_"),
+		BindingKey:    strings.Join([]string{constants.ProjectName, "Queue"}, "_"),
 		PrefetchCount: 3,
 	}
 }

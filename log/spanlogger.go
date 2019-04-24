@@ -39,6 +39,17 @@ func (sl spanLogger) Fatal(msg string, fields ...zapcore.Field) {
 	sl.logger.Fatal(msg, fields...)
 }
 
+func (sl spanLogger) Debug(msg string, fields ...zapcore.Field) {
+	sl.logToSpan("DEBUG", msg, fields...)
+	sl.logger.Fatal(msg, fields...)
+}
+
+func (sl spanLogger) Panic(msg string, fields ...zapcore.Field) {
+	sl.logToSpan("PANIC", msg, fields...)
+	tag.Error.Set(sl.span, true) // set error tag
+	sl.logger.Fatal(msg, fields...)
+}
+
 // write span log
 func (sl spanLogger) logToSpan(level, msg string, fields ...zapcore.Field) {
 	fa := fieldAdapter(make([]log.Field, 0, 2+len(fields)))
