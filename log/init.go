@@ -13,6 +13,7 @@ import (
 	"github.com/si9ma/KillOJ-common/constants"
 
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 type LogEncoding string
@@ -25,7 +26,7 @@ var zapLogger *zap.Logger
 // auto init
 func init() {
 	cfg := zap.NewProductionConfig()
-	cfg.Encoding = string(Console) // default console
+	cfg.Encoding = string(Json) // default json
 	zapLogger, _ = cfg.Build()
 }
 
@@ -48,8 +49,18 @@ func Init(outputPaths []string, encode LogEncoding) (err error) {
 		}
 	}
 
+	// config format
+	encoderCfg := zap.NewProductionEncoderConfig()
+	encoderCfg.TimeKey = "timestamp"
+	encoderCfg.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderCfg.EncodeCaller = zapcore.FullCallerEncoder
+	if encode == Console {
+		encoderCfg.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	}
+
 	cfg := zap.NewProductionConfig()
 	cfg.Encoding = string(encode)
+	cfg.EncoderConfig = encoderCfg
 	cfg.OutputPaths = outputPaths // set output paths
 	zapLogger, err = cfg.Build()
 	return

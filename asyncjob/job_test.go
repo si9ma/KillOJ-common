@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"testing"
+	"time"
+
+	"github.com/si9ma/KillOJ-common/constants"
 
 	"github.com/si9ma/KillOJ-common/log"
 	"go.uber.org/zap"
@@ -42,7 +45,7 @@ func TestSender(t *testing.T) {
 		log.For(ctx).Info("batch", zap.String("batch.id", batchID))
 
 		judgeTask := tasks.Signature{
-			Name: "judge",
+			Name: "test",
 		}
 
 		_, err := Server().SendTaskWithContext(ctx, &judgeTask)
@@ -70,7 +73,18 @@ func TestWorker(t *testing.T) {
 		t.Fatal()
 	}
 
-	if err := Server().NewWorker("test", 3).Launch(); err != nil {
+	if err := Server().NewCustomQueueWorker("test", 3, constants.ProjectName).Launch(); err != nil {
 		t.Fatal("launch worker fail", err)
 	}
+}
+
+func TestLog(t *testing.T) {
+	logger, _ := zap.NewProductionConfig()
+	defer logger.Sync()
+	logger.Info("failed to fetch URL",
+		// Structured context as strongly typed Field values.
+		zap.String("url", "www.baidu.com"),
+		zap.Int("attempt", 3),
+		zap.Duration("backoff", time.Second),
+	)
 }

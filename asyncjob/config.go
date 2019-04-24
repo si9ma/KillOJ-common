@@ -2,6 +2,7 @@ package asyncjob
 
 import (
 	"encoding/json"
+	"strings"
 
 	mconfig "github.com/RichardKnop/machinery/v1/config"
 	"github.com/si9ma/KillOJ-common/constants"
@@ -25,10 +26,10 @@ func (c Config) String() string {
 func defaultConfig() Config {
 	return Config{
 		Broker:        "amqp://guest:guest@localhost:5672/",
-		DefaultQueue:  "judger",
-		Exchange:      constants.ProjectName,
+		DefaultQueue:  strings.Join([]string{constants.ProjectName, "queue"}, "_"),
+		Exchange:      strings.Join([]string{constants.ProjectName, "exchange"}, "_"),
 		ExchangeType:  "direct",
-		BindingKey:    constants.ProjectName,
+		BindingKey:    strings.Join([]string{constants.ProjectName, "queue"}, "_"),
 		PrefetchCount: 3,
 	}
 }
@@ -36,9 +37,8 @@ func defaultConfig() Config {
 // convert config to machinery config
 func (c Config) toMachineryCfg() *mconfig.Config {
 	return &mconfig.Config{
-		Broker:        c.Broker,
-		DefaultQueue:  c.DefaultQueue,
-		ResultBackend: "amqp://guest:guest@localhost:5672/", // we don't use result backend, set a default value
+		Broker:       c.Broker,
+		DefaultQueue: c.DefaultQueue,
 		AMQP: &mconfig.AMQPConfig{
 			Exchange:      c.Exchange,
 			ExchangeType:  c.ExchangeType,
