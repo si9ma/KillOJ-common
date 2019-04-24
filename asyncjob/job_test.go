@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"testing"
-	"time"
 
 	"github.com/si9ma/KillOJ-common/constants"
 
@@ -76,15 +75,4 @@ func TestWorker(t *testing.T) {
 	if err := Server().NewCustomQueueWorker("test", 3, constants.ProjectName).Launch(); err != nil {
 		t.Fatal("launch worker fail", err)
 	}
-}
-
-func TestLog(t *testing.T) {
-	logger, _ := zap.NewProductionConfig()
-	defer logger.Sync()
-	logger.Info("failed to fetch URL",
-		// Structured context as strongly typed Field values.
-		zap.String("url", "www.baidu.com"),
-		zap.Int("attempt", 3),
-		zap.Duration("backoff", time.Second),
-	)
 }

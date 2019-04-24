@@ -3,6 +3,8 @@ package asyncjob
 import (
 	"github.com/RichardKnop/machinery/v1"
 	"github.com/RichardKnop/machinery/v1/brokers/iface"
+
+	machlog "github.com/RichardKnop/machinery/v1/log"
 	"github.com/si9ma/KillOJ-common/log"
 )
 
@@ -19,6 +21,7 @@ func Init(cfg Config) (err error) {
 	machineryBackend := NewBlankBackend()
 
 	machineryServer = machinery.NewServerWithBrokerBackend(machineryCfg, machineryBroker, machineryBackend)
+	machlog.Set(ZLogger{}) // custom logger
 	return
 }
 

@@ -25,9 +25,7 @@ var zapLogger *zap.Logger
 
 // auto init
 func init() {
-	cfg := zap.NewProductionConfig()
-	cfg.Encoding = string(Json) // default json
-	zapLogger, _ = cfg.Build()
+	_ = Init([]string{}, Json)
 }
 
 // manual init
