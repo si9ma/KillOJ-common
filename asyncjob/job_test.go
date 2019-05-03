@@ -32,6 +32,7 @@ func TestSender(t *testing.T) {
 	cfg := defaultConfig()
 	cfg.Broker = "amqp://si9ma:rabbitmq@localhost:5672/"
 	cfg.BindingKey = strings.Join([]string{constants.ProjectName, "Judge", "Queue"}, "_")
+	cfg.DefaultQueue = strings.Join([]string{constants.ProjectName, "Judge", "Queue"}, "_")
 	var server *machinery.Server
 	var err error
 	if server, err = Init(cfg); err != nil {
