@@ -40,3 +40,12 @@ func IsDebug() bool {
 
 	return debug
 }
+
+func GetLang() string {
+	lang := constants.DefaultLang
+	if val := os.Getenv(constants.EnvLang); val == "" {
+		lang = val
+	}
+
+	return lang
+}

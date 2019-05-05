@@ -40,7 +40,7 @@ func TestInit(t *testing.T) {
 	}
 }
 
-// cmd: gorun -m=TEST -e=JAEGER_AGENT_HOST=jaeger -n=prod_net github.com/si9ma/KillOJ-common/wredis TestRedisOpenTracing
+// cmd: gorun -m=TEST --extra="-e JAEGER_AGENT_HOST=jaeger --network=prod_net" github.com/si9ma/KillOJ-common/wredis TestRedisOpenTracing
 func TestRedisOpenTracing(t *testing.T) {
 	var client *redis.ClusterClient
 	var err error
