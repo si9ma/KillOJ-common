@@ -43,7 +43,7 @@ func TestSender(t *testing.T) {
 	opentracing.SetGlobalTracer(tracer)
 	defer closer.Close()
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1; i++ {
 		span, ctx := opentracing.StartSpanFromContext(context.Background(), "send")
 
 		batchID := uuid.New().String()
@@ -52,6 +52,29 @@ func TestSender(t *testing.T) {
 
 		judgeTask := tasks.Signature{
 			Name: "judge",
+			Args: []tasks.Arg{
+				{
+					Name:  "problemId",
+					Type:  "uint64",
+					Value: 1,
+				},
+				{
+					Name: "srcCode",
+					Type: "string",
+					Value: `package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("vim-go")
+}`,
+				},
+				{
+					Name:  "lang",
+					Type:  "string",
+					Value: "c",
+				},
+			},
 		}
 
 		_, err := server.SendTaskWithContext(ctx, &judgeTask)
