@@ -1,28 +1,30 @@
 package judge
 
-// 1xx: compile error
+import "github.com/si9ma/KillOJ-common/utils"
+
+// 11xx: compile error
 const (
-	INNER_COMPILER_ERR = 101 // error from real compiler
-	OUTER_COMPILER_ERR = 102 // error from our outer compiler
-	COMPILE_TIMEOUT    = 103
+	INNER_COMPILER_ERR = 1101 // error from real compiler
+	OUTER_COMPILER_ERR = 1102 // error from our outer compiler
+	COMPILE_TIMEOUT    = 1103
 )
 
-// [2-4]xx: container error
+// 1[2-4]xx: container error
 const (
-	// 2xx: error from outermost process (the process to start container)
-	RUNNER_ERR = 201
+	// 12xx: error from outermost process (the process to start container)
+	RUNNER_ERR = 1201
 
-	// 3xx: container error (error from container)
-	CONTAINER_ERR = 301
+	// 13xx: container error (error from container)
+	CONTAINER_ERR = 1301
 
-	// 4xx: run error (error from program run in container)
-	APP_ERR                   = 401
-	WRONG_ANSWER              = 402
-	OUT_OF_MEMORY             = 403
-	RUN_TIMEOUT               = 404
-	BAD_SYSTEMCALL            = 405
-	NO_ENOUGH_PID             = 406
-	JAVA_SECURITY_MANAGER_ERR = 407
+	// 14xx: run error (error from program run in container)
+	APP_ERR                   = 1401
+	WRONG_ANSWER_ERR          = 1402
+	OUT_OF_MEMORY_ERR         = 1403
+	RUN_TIMEOUT_ERR           = 1404
+	BAD_SYSTEMCALL_ERR        = 1405
+	NO_ENOUGH_PID_ERR         = 1406
+	JAVA_SECURITY_MANAGER_ERR = 1407
 )
 
 type ErrAdapter struct {
@@ -96,7 +98,7 @@ var (
 )
 
 // map errno to ErrAdapter
-var ErrAdapterMapping = map[int]ErrAdapter{
+var ErrAdapterMapping = map[int64]ErrAdapter{
 	RUNNER_ERR:         SystemErrAdapter,
 	CONTAINER_ERR:      SystemErrAdapter,
 	OUTER_COMPILER_ERR: SystemErrAdapter,
@@ -116,29 +118,29 @@ var ErrAdapterMapping = map[int]ErrAdapter{
 		OuterStatus: RuntimeErrorStatus,
 		OuterMsg:    RuntimeErrorMsg,
 	},
-	RUN_TIMEOUT: {
+	RUN_TIMEOUT_ERR: {
 		InnerMsg:    RunTimeOutMsg,
 		OuterStatus: RunTimeOutStatus,
 		OuterMsg:    RunTimeOutMsg,
 	},
-	WRONG_ANSWER: {
+	WRONG_ANSWER_ERR: {
 		InnerMsg:    WrongAnswerErrorMsg,
 		OuterStatus: WrongAnswerStatus,
 		OuterMsg:    WrongAnswerErrorMsg,
 	},
-	OUT_OF_MEMORY: {
+	OUT_OF_MEMORY_ERR: {
 		InnerMsg:    OOMErrorMsg,
 		OuterStatus: OOMStatus,
 		OuterMsg:    OOMErrorMsg,
 	},
 
 	// InnerMsg and OuterMsg is different
-	BAD_SYSTEMCALL: {
+	BAD_SYSTEMCALL_ERR: {
 		InnerMsg:    BadSysErrorMsg,
 		OuterStatus: RuntimeErrorStatus,
 		OuterMsg:    RuntimeErrorMsg,
 	},
-	NO_ENOUGH_PID: {
+	NO_ENOUGH_PID_ERR: {
 		InnerMsg:    NoEnoughPidErrorMsg,
 		OuterStatus: RuntimeErrorStatus,
 		OuterMsg:    RuntimeErrorMsg,
@@ -150,8 +152,35 @@ var ErrAdapterMapping = map[int]ErrAdapter{
 	},
 }
 
-func GetInnerErrorMsg(errno int) {
+// return empty string when don't exist
+func GetInnerErrorMsgByErrNo(errno int64) string {
+	lang := utils.GetLang()
+	if adapter, ok := ErrAdapterMapping[errno]; !ok {
+		if val, ok := adapter.InnerMsg[lang]; ok {
+			return val
+		}
+	}
+
+	return ""
 }
 
-func GetOuterErrorMsg(errno int) {
+// return empty string when don't exist
+func GetOuterErrorMsgByErrNo(errno int64) string {
+	lang := utils.GetLang()
+	if adapter, ok := ErrAdapterMapping[errno]; !ok {
+		if val, ok := adapter.OuterMsg[lang]; ok {
+			return val
+		}
+	}
+
+	return ""
+}
+
+// return empty status when don't exist
+func GetStatusByErrNo(errno int64) Status {
+	if adapter, ok := ErrAdapterMapping[errno]; !ok {
+		return adapter.OuterStatus
+	}
+
+	return NullStatus
 }

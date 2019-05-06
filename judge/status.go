@@ -11,4 +11,5 @@ const (
 	OOMStatus          = Status("OOM")
 	WrongAnswerStatus  = Status("WrongAnswer")
 	SystemErrorStatus  = Status("SystemError")
+	NullStatus         = Status("")
 )
