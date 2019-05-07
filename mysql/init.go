@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	otgorm "github.com/smacker/opentracing-gorm"
 )
 

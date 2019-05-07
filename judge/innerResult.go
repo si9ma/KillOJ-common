@@ -6,7 +6,7 @@ const (
 )
 
 const (
-	SUCCESS = iota
+	SUCCESS = int64(iota)
 	FAIL
 )
 

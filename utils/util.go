@@ -3,9 +3,13 @@ package utils
 import (
 	"fmt"
 	"os"
+	"path"
 	"strconv"
+	"strings"
 
 	"github.com/si9ma/KillOJ-common/constants"
+	"github.com/si9ma/KillOJ-common/log"
+	"go.uber.org/zap"
 )
 
 func ReadFile(path string) ([]byte, error) {
@@ -41,11 +45,29 @@ func IsDebug() bool {
 	return debug
 }
 
-func GetLang() string {
-	lang := constants.DefaultLang
-	if val := os.Getenv(constants.EnvLang); val == "" {
-		lang = val
+func MkDirAll4RelativePath(relativePath string) (string, error) {
+	pwd, err := os.Getwd()
+	if err != nil {
+		log.Bg().Error("get current directory fail", zap.Error(err))
+		return "", err
+	}
+	absolutePath := strings.Join([]string{pwd, relativePath}, "/")
+	err = MkDirAll4Path(absolutePath)
+
+	return absolutePath, err
+}
+
+func MkDirAll4Path(p string) error {
+	dir := path.Dir(p)
+
+	// create directory if directory not exist
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+			log.Bg().Error("create directory fail",
+				zap.String("dir", dir), zap.Error(err))
+			return err
+		}
 	}
 
-	return lang
+	return nil
 }

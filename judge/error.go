@@ -1,6 +1,9 @@
 package judge
 
-import "github.com/si9ma/KillOJ-common/utils"
+import (
+	"github.com/si9ma/KillOJ-common/lang"
+	"github.com/si9ma/KillOJ-common/tip"
+)
 
 // 11xx: compile error
 const (
@@ -27,136 +30,84 @@ const (
 	JAVA_SECURITY_MANAGER_ERR = 1407
 )
 
-type ErrAdapter struct {
+type errAdapter struct {
 	// inner error message
 	// lang code -> message
-	InnerMsg    map[string]string
+	InnerMsg    tip.Tip
 	OuterStatus Status // the status expose to user
 
 	// the message expose to user,
 	// lang code -> message
-	OuterMsg map[string]string
+	OuterMsg tip.Tip
 }
 
 // System error
-var SystemErrAdapter = ErrAdapter{
-	InnerMsg:    SystemErrorMsg,
+var systemErrAdapter = errAdapter{
+	InnerMsg:    tip.SystemErrorTip,
 	OuterStatus: SystemErrorStatus,
-	OuterMsg:    SystemErrorMsg,
+	OuterMsg:    tip.SystemErrorTip,
 }
 
-var (
-	CompileTimeOutMsg = map[string]string{
-		"zh": "编译时间太长，请检查代码!",
-		"en": "compile too long, Please check your code!",
-	}
-
-	RunTimeOutMsg = map[string]string{
-		"zh": "程序运行超时，请检查代码!",
-		"en": "run program timeout, Please check your code!",
-	}
-
-	SystemErrorMsg = map[string]string{
-		"zh": "糟糕，判题机异常，请向管理员报告异常。",
-		"en": "Oops, something has gone wrong with the judger. Please report this to administrator.",
-	}
-
-	RuntimeErrorMsg = map[string]string{
-		"zh": "运行时错误，请检查代码!",
-		"en": "Runtime error, Please check your code!",
-	}
-
-	CompileErrorMsg = map[string]string{
-		"zh": "编译错误,请检查代码!",
-		"en": "compile fail,Please check your code!",
-	}
-
-	WrongAnswerErrorMsg = map[string]string{
-		"zh": "结果错误!",
-		"en": "Wrong answer!",
-	}
-
-	OOMErrorMsg = map[string]string{
-		"zh": "超出内存使用限制!",
-		"en": "Memory Limit Exceeded!",
-	}
-
-	BadSysErrorMsg = map[string]string{
-		"zh": "非法系统调用!",
-		"en": "Illegal system call!",
-	}
-
-	NoEnoughPidErrorMsg = map[string]string{
-		"zh": "超出PID最大允许值限制!",
-		"en": "No Enough PID!",
-	}
-
-	JavaSecurityManagerErrorMsg = map[string]string{
-		"zh": "非法Java操作!",
-		"en": "Illegal Java operation!",
-	}
-)
-
-// map errno to ErrAdapter
-var ErrAdapterMapping = map[int64]ErrAdapter{
-	RUNNER_ERR:         SystemErrAdapter,
-	CONTAINER_ERR:      SystemErrAdapter,
-	OUTER_COMPILER_ERR: SystemErrAdapter,
+// map errno to errAdapter
+var errAdapterMapping = map[int64]errAdapter{
+	RUNNER_ERR:         systemErrAdapter,
+	CONTAINER_ERR:      systemErrAdapter,
+	OUTER_COMPILER_ERR: systemErrAdapter,
 
 	INNER_COMPILER_ERR: {
-		InnerMsg:    CompileErrorMsg,
+		InnerMsg:    tip.CompileErrorTip,
 		OuterStatus: CompileErrorStatus,
-		OuterMsg:    CompileErrorMsg,
+		OuterMsg:    tip.CompileErrorTip,
 	},
 	COMPILE_TIMEOUT: {
-		InnerMsg:    CompileTimeOutMsg,
+		InnerMsg:    tip.CompileTimeOutTip,
 		OuterStatus: CompileErrorStatus,
-		OuterMsg:    CompileTimeOutMsg,
+		OuterMsg:    tip.CompileTimeOutTip,
 	},
 	APP_ERR: {
-		InnerMsg:    RuntimeErrorMsg,
+		InnerMsg:    tip.RuntimeErrorTip,
 		OuterStatus: RuntimeErrorStatus,
-		OuterMsg:    RuntimeErrorMsg,
+		OuterMsg:    tip.RuntimeErrorTip,
 	},
 	RUN_TIMEOUT_ERR: {
-		InnerMsg:    RunTimeOutMsg,
+		InnerMsg:    tip.RunTimeOutTip,
 		OuterStatus: RunTimeOutStatus,
-		OuterMsg:    RunTimeOutMsg,
+		OuterMsg:    tip.RunTimeOutTip,
 	},
 	WRONG_ANSWER_ERR: {
-		InnerMsg:    WrongAnswerErrorMsg,
+		InnerMsg:    tip.WrongAnswerErrorTip,
 		OuterStatus: WrongAnswerStatus,
-		OuterMsg:    WrongAnswerErrorMsg,
+		OuterMsg:    tip.WrongAnswerErrorTip,
 	},
 	OUT_OF_MEMORY_ERR: {
-		InnerMsg:    OOMErrorMsg,
+		InnerMsg:    tip.OOMErrorTip,
 		OuterStatus: OOMStatus,
-		OuterMsg:    OOMErrorMsg,
+		OuterMsg:    tip.OOMErrorTip,
 	},
 
 	// InnerMsg and OuterMsg is different
 	BAD_SYSTEMCALL_ERR: {
-		InnerMsg:    BadSysErrorMsg,
+		InnerMsg:    tip.BadSysErrorTip,
 		OuterStatus: RuntimeErrorStatus,
-		OuterMsg:    RuntimeErrorMsg,
+		OuterMsg:    tip.RuntimeErrorTip,
 	},
 	NO_ENOUGH_PID_ERR: {
-		InnerMsg:    NoEnoughPidErrorMsg,
+		InnerMsg:    tip.NoEnoughPidErrorTip,
 		OuterStatus: RuntimeErrorStatus,
-		OuterMsg:    RuntimeErrorMsg,
+		OuterMsg:    tip.RuntimeErrorTip,
 	},
 	JAVA_SECURITY_MANAGER_ERR: {
-		InnerMsg:    JavaSecurityManagerErrorMsg,
+		InnerMsg:    tip.JavaSecurityManagerErrorTip,
 		OuterStatus: RuntimeErrorStatus,
-		OuterMsg:    RuntimeErrorMsg,
+		OuterMsg:    tip.RuntimeErrorTip,
 	},
 }
 
 // return empty string when don't exist
 func GetInnerErrorMsgByErrNo(errno int64) string {
-	lang := utils.GetLang()
-	if adapter, ok := ErrAdapterMapping[errno]; !ok {
-		if val, ok := adapter.InnerMsg[lang]; ok {
+	lan := lang.GetLangFromEnv()
+	if adapter, ok := errAdapterMapping[errno]; !ok {
+		if val, ok := adapter.InnerMsg[lan]; ok {
 			return val
 		}
 	}
@@ -166,9 +117,9 @@ func GetInnerErrorMsgByErrNo(errno int64) string {
 
 // return empty string when don't exist
 func GetOuterErrorMsgByErrNo(errno int64) string {
-	lang := utils.GetLang()
-	if adapter, ok := ErrAdapterMapping[errno]; !ok {
-		if val, ok := adapter.OuterMsg[lang]; ok {
+	lan := lang.GetLangFromEnv()
+	if adapter, ok := errAdapterMapping[errno]; !ok {
+		if val, ok := adapter.OuterMsg[lan]; ok {
 			return val
 		}
 	}
@@ -178,7 +129,7 @@ func GetOuterErrorMsgByErrNo(errno int64) string {
 
 // return empty status when don't exist
 func GetStatusByErrNo(errno int64) Status {
-	if adapter, ok := ErrAdapterMapping[errno]; !ok {
+	if adapter, ok := errAdapterMapping[errno]; !ok {
 		return adapter.OuterStatus
 	}
 

@@ -1,4 +1,4 @@
-package wredis
+package kredis
 
 type Config struct {
 	Addrs        []string `yaml:"addrs"`

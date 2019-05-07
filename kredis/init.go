@@ -1,5 +1,5 @@
 // redis wrapper
-package wredis
+package kredis
 
 import (
 	"github.com/go-redis/redis"

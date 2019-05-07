@@ -54,25 +54,9 @@ func TestSender(t *testing.T) {
 			Name: "judge",
 			Args: []tasks.Arg{
 				{
-					Name:  "problemId",
-					Type:  "uint64",
+					Name:  "submitId",
+					Type:  "int",
 					Value: 1,
-				},
-				{
-					Name: "srcCode",
-					Type: "string",
-					Value: `package main
-
-import "fmt"
-
-func main() {
-	fmt.Println("vim-go")
-}`,
-				},
-				{
-					Name:  "lang",
-					Type:  "string",
-					Value: "c",
 				},
 			},
 		}

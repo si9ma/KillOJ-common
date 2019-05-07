@@ -1,4 +1,4 @@
-package wredis
+package kredis
 
 import (
 	"context"

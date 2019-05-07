@@ -1,6 +1,6 @@
 // refer: https://github.com/smacker/opentracing-go-redis/blob/master/otredis.go,
 // replace redis.Client with redis.ClusterClient
-package wredis
+package kredis
 
 import (
 	"context"
