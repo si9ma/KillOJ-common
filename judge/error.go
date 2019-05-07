@@ -106,7 +106,7 @@ var errAdapterMapping = map[int64]errAdapter{
 // return empty string when don't exist
 func GetInnerErrorMsgByErrNo(errno int64) string {
 	lan := lang.GetLangFromEnv()
-	if adapter, ok := errAdapterMapping[errno]; !ok {
+	if adapter, ok := errAdapterMapping[errno]; ok {
 		if val, ok := adapter.InnerMsg[lan]; ok {
 			return val
 		}
@@ -118,7 +118,7 @@ func GetInnerErrorMsgByErrNo(errno int64) string {
 // return empty string when don't exist
 func GetOuterErrorMsgByErrNo(errno int64) string {
 	lan := lang.GetLangFromEnv()
-	if adapter, ok := errAdapterMapping[errno]; !ok {
+	if adapter, ok := errAdapterMapping[errno]; ok {
 		if val, ok := adapter.OuterMsg[lan]; ok {
 			return val
 		}
@@ -129,7 +129,7 @@ func GetOuterErrorMsgByErrNo(errno int64) string {
 
 // return empty status when don't exist
 func GetStatusByErrNo(errno int64) Status {
-	if adapter, ok := errAdapterMapping[errno]; !ok {
+	if adapter, ok := errAdapterMapping[errno]; ok {
 		return adapter.OuterStatus
 	}
 

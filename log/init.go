@@ -38,7 +38,6 @@ func Init(outputPaths []string, encode LogEncoding) (err error) {
 	encoderCfg := zap.NewProductionEncoderConfig()
 	encoderCfg.TimeKey = "timestamp"
 	encoderCfg.EncodeTime = zapcore.ISO8601TimeEncoder
-	encoderCfg.EncodeCaller = zapcore.FullCallerEncoder
 	if encode == Console {
 		encoderCfg.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	}

@@ -8,8 +8,6 @@ import (
 	"strings"
 
 	"github.com/si9ma/KillOJ-common/constants"
-	"github.com/si9ma/KillOJ-common/log"
-	"go.uber.org/zap"
 )
 
 func ReadFile(path string) ([]byte, error) {
@@ -48,7 +46,6 @@ func IsDebug() bool {
 func MkDirAll4RelativePath(relativePath string) (string, error) {
 	pwd, err := os.Getwd()
 	if err != nil {
-		log.Bg().Error("get current directory fail", zap.Error(err))
 		return "", err
 	}
 	absolutePath := strings.Join([]string{pwd, relativePath}, "/")
@@ -63,8 +60,6 @@ func MkDirAll4Path(p string) error {
 	// create directory if directory not exist
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
-			log.Bg().Error("create directory fail",
-				zap.String("dir", dir), zap.Error(err))
 			return err
 		}
 	}
