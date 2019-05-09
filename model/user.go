@@ -1,29 +1,25 @@
 package model
 
 import (
-	"database/sql"
 	"time"
-
-	"github.com/guregu/null"
-)
-
-var (
-	_ = time.Second
-	_ = sql.LevelDefault
-	_ = null.Bool{}
 )
 
 type User struct {
-	ID           int       `gorm:"column:id;primary_key" json:"id"`
-	CreateAt     time.Time `gorm:"column:create_at" json:"create_at"`
-	UpdateAt     time.Time `gorm:"column:update_at" json:"update_at"`
-	NickName     string    `gorm:"column:nick_name" json:"nick_name"`
-	Signature    string    `gorm:"column:signature" json:"signature"`
-	StudentNum   string    `gorm:"column:student_num" json:"student_num"`
-	Organization string    `gorm:"column:organization" json:"organization"`
-	Email        string    `gorm:"column:email" json:"email"`
-	Site         string    `gorm:"column:site" json:"site"`
-	GithubID     string    `gorm:"column:github_id" json:"github_id"`
+	ID           int       `gorm:"column:id;primary_key" json:"-"`
+	GithubUserID string    `gorm:"column:github_user_id" json:"-"`
+	Email        string    `gorm:"column:email" json:"email" binding:"required,email,max=50"`
+	CreateAt     time.Time `gorm:"column:create_at" json:"-"`
+	UpdateAt     time.Time `gorm:"column:update_at" json:"-"`
+
+	// password from user input, password should't response to user,
+	// so set omitempty && set this field to nil before return
+	Passwd           string `gorm:"-" json:"password,omitempty" binding:"required,max=30,min=6"`
+	EncryptedPasswd  string `gorm:"column:passwd" json:"-"` // encrypted password in db
+	NickName         string `gorm:"column:nick_name" json:"nick_name" binding:"required,max=50"`
+	Signature        string `gorm:"column:signature" json:"signature" binding:"max=100"`
+	NoInOrganization string `gorm:"column:no_in_organization" json:"no_in_organization" binding:"max=30"`
+	Organization     string `gorm:"column:organization" json:"organization" binding:"max=50"`
+	Site             string `gorm:"column:site" json:"site" binding:"max=50"`
 }
 
 // TableName sets the insert table name for this struct type

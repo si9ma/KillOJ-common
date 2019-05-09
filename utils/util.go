@@ -1,11 +1,15 @@
 package utils
 
 import (
+	"bytes"
+	"encoding/gob"
 	"fmt"
 	"os"
 	"path"
+	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 
 	"github.com/si9ma/KillOJ-common/constants"
 )
@@ -65,4 +69,39 @@ func MkDirAll4Path(p string) error {
 	}
 
 	return nil
+}
+
+func Lower1stCharacter(ipt string) string {
+	for i, v := range ipt {
+		return string(unicode.ToLower(v)) + ipt[i+1:]
+	}
+
+	return ipt
+}
+
+func Upper1stCharacter(ipt string) string {
+	for i, v := range ipt {
+		return string(unicode.ToUpper(v)) + ipt[i+1:]
+	}
+
+	return ipt
+}
+
+func CheckEmail(email string) bool {
+	exp := `^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`
+	ok, err := regexp.Match(exp, []byte(email))
+	if !ok || err != nil {
+		return false
+	}
+
+	return true
+}
+
+// refer : https://studygolang.com/articles/2118
+func DeepCopy(dst, src interface{}) error {
+	var buf bytes.Buffer
+	if err := gob.NewEncoder(&buf).Encode(src); err != nil {
+		return err
+	}
+	return gob.NewDecoder(bytes.NewBuffer(buf.Bytes())).Decode(dst)
 }
