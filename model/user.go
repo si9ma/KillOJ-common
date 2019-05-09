@@ -1,15 +1,13 @@
 package model
 
-import (
-	"time"
-)
+import "time"
 
 type User struct {
-	ID           int       `gorm:"column:id;primary_key" json:"-"`
+	ID           int       `gorm:"column:id;primary_key" json:"id"`
 	GithubUserID string    `gorm:"column:github_user_id" json:"-"`
 	Email        string    `gorm:"column:email" json:"email" binding:"required,email,max=50"`
-	CreateAt     time.Time `gorm:"column:create_at" json:"-"`
-	UpdateAt     time.Time `gorm:"column:update_at" json:"-"`
+	CreatedAt    time.Time `gorm:"column:created_at" json:"-"`
+	UpdatedAt    time.Time `gorm:"column:updated_at" json:"-"`
 
 	// password from user input, password should't response to user,
 	// so set omitempty && set this field to nil before return
