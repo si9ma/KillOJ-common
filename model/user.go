@@ -4,14 +4,15 @@ import "time"
 
 type User struct {
 	ID           int       `gorm:"column:id;primary_key" json:"id"`
-	GithubUserID string    `gorm:"column:github_user_id" json:"-"`
+	GithubUserID string    `gorm:"column:github_user_id" json:"github_user_id"`
+	GithubName   string    `gorm:"column:github_name" json:"github_name"`
 	Email        string    `gorm:"column:email" json:"email" binding:"required,email,max=50"`
 	CreatedAt    time.Time `gorm:"column:created_at" json:"-"`
 	UpdatedAt    time.Time `gorm:"column:updated_at" json:"-"`
 
 	// password from user input, password should't response to user,
 	// so set omitempty && set this field to nil before return
-	Passwd           string `gorm:"-" json:"password,omitempty" binding:"required,max=30,min=6"`
+	Passwd           string `gorm:"-" json:"password,omitempty" binding:"max=30,min=6"`
 	EncryptedPasswd  string `gorm:"column:passwd" json:"-"` // encrypted password in db
 	NickName         string `gorm:"column:nick_name" json:"nick_name" binding:"required,max=50"`
 	Signature        string `gorm:"column:signature" json:"signature" binding:"max=100"`

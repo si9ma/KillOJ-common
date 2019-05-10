@@ -81,18 +81,18 @@ var (
 	}
 
 	ValidateRequireTip = Tip{
-		language.Chinese.String(): "%s不能为空",
-		language.English.String(): "%s is required",
+		language.Chinese.String(): "%v不能为空",
+		language.English.String(): "%v is required",
 	}
 
 	ValidateMaxTip = Tip{
-		language.Chinese.String(): "%s不能大于%s",
-		language.English.String(): "%s cannot be longer than %s",
+		language.Chinese.String(): "%v不能大于%v",
+		language.English.String(): "%v cannot be longer than %v",
 	}
 
 	ValidateMinTip = Tip{
-		language.Chinese.String(): "%s必须大于%s",
-		language.English.String(): "%s must be longer than %s",
+		language.Chinese.String(): "%v必须大于%v",
+		language.English.String(): "%v must be longer than %v",
 	}
 
 	ValidateEmailTip = Tip{
@@ -101,13 +101,13 @@ var (
 	}
 
 	ValidateLenTip = Tip{
-		language.Chinese.String(): "%s长度必须为%s",
-		language.English.String(): "%s must be %s characters long",
+		language.Chinese.String(): "%v长度必须为%v",
+		language.English.String(): "%v must be %v characters long",
 	}
 
 	ValidateInvalidTip = Tip{
-		language.Chinese.String(): "%s非法参数",
-		language.English.String(): "%s is not valid",
+		language.Chinese.String(): "%v非法参数",
+		language.English.String(): "%v is not valid",
 	}
 
 	InternalServerErrorTip = Tip{
@@ -116,8 +116,13 @@ var (
 	}
 
 	UserAlreadyExistInOrgTip = Tip{
-		language.Chinese.String(): "用户 %s 已经在 %s 中",
-		language.English.String(): "user %s already exist in %s",
+		language.Chinese.String(): "用户 %v 已经在 %v 中",
+		language.English.String(): "user %v already exist in %v",
+	}
+
+	ShouldBothExistOrNotTip = Tip{
+		language.Chinese.String(): "%v 和 %v 应该同时为空或者同时不为空",
+		language.English.String(): "%v and %v should both empty or both not empty",
 	}
 
 	OrgShouldExistWhenNoExistTip = Tip{
@@ -125,19 +130,24 @@ var (
 		language.English.String(): "organization name should not empty when no_in_organization is not empty",
 	}
 
+	MustNotEmptyTip = Tip{
+		language.Chinese.String(): "不允许为空",
+		language.English.String(): "not allowed empty",
+	}
+
 	AlreadyExistTip = Tip{
-		language.Chinese.String(): "%s 已经存在",
-		language.English.String(): "%s already exist",
+		language.Chinese.String(): "%v 已经存在",
+		language.English.String(): "%v already exist",
 	}
 
 	NotExistTip = Tip{
-		language.Chinese.String(): "%s 不存在",
-		language.English.String(): "%s not exist",
+		language.Chinese.String(): "%v 不存在",
+		language.English.String(): "%v not exist",
 	}
 
 	UserNotExistTip = Tip{
-		language.Chinese.String(): "用户 %s 不存在",
-		language.English.String(): "user %s not exist",
+		language.Chinese.String(): "用户 %v 不存在",
+		language.English.String(): "user %v not exist",
 	}
 
 	PasswordWrong = Tip{
@@ -146,8 +156,8 @@ var (
 	}
 
 	ThirdAuthFailTip = Tip{
-		language.Chinese.String(): "%s 认证失败",
-		language.English.String(): "%s unauthorized fail",
+		language.Chinese.String(): "%v 认证失败",
+		language.English.String(): "%v unauthorized fail",
 	}
 
 	NoSignupTip = Tip{
@@ -156,8 +166,8 @@ var (
 	}
 
 	NotSupportProviderTip = Tip{
-		language.Chinese.String(): "不支持 %s 登录",
-		language.English.String(): "provider %s is not supported",
+		language.Chinese.String(): "不支持 %v 登录",
+		language.English.String(): "provider %v is not supported",
 	}
 
 	UnauthorizedGeneralTip = Tip{

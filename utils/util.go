@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -117,4 +118,16 @@ func GetUrlRoot(port string) string {
 	}
 
 	return url
+}
+
+func BothZeroOrNot(v1, v2 interface{}) bool {
+	v1IsZero := IsZeroOfUnderlyingType(v1)
+	v2IsZero := IsZeroOfUnderlyingType(v2)
+
+	return (v1IsZero && v2IsZero) || (!v1IsZero && !v2IsZero)
+}
+
+// refer : https://stackoverflow.com/a/13906031/8042600
+func IsZeroOfUnderlyingType(x interface{}) bool {
+	return reflect.DeepEqual(x, reflect.Zero(reflect.TypeOf(x)).Interface())
 }
