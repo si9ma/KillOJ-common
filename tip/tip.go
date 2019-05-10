@@ -140,6 +140,26 @@ var (
 		language.English.String(): "user %s not exist",
 	}
 
+	PasswordWrong = Tip{
+		language.Chinese.String(): "密码错误",
+		language.English.String(): "password is wrong",
+	}
+
+	ThirdAuthFailTip = Tip{
+		language.Chinese.String(): "%s 认证失败",
+		language.English.String(): "%s unauthorized fail",
+	}
+
+	NoSignupTip = Tip{
+		language.Chinese.String(): "你还未注册",
+		language.English.String(): "haven't signup",
+	}
+
+	NotSupportProviderTip = Tip{
+		language.Chinese.String(): "不支持 %s 登录",
+		language.English.String(): "provider %s is not supported",
+	}
+
 	UnauthorizedGeneralTip = Tip{
 		language.Chinese.String(): "unauthorized",
 		language.English.String(): "unauthorized",

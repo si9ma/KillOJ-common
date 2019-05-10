@@ -105,3 +105,16 @@ func DeepCopy(dst, src interface{}) error {
 	}
 	return gob.NewDecoder(bytes.NewBuffer(buf.Bytes())).Decode(dst)
 }
+
+func GetUrlRoot(port string) string {
+	url := os.Getenv(constants.EnvURL)
+	if url == "" {
+		url = "http://127.0.0.1" // default to localhost
+	}
+
+	if url != "80" && url != "" { // 80 and empty port should be ignored
+		url = url + ":" + port
+	}
+
+	return url
+}
