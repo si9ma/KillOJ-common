@@ -20,17 +20,39 @@ func GetTestDB() (db *gorm.DB, err error) {
 	return InitDB(cfg)
 }
 
-func ApplyDBError(c *gin.Context, err error) (hasErr bool, isNotFoundErr bool) {
-	if err == nil {
-		return false, false
-	}
+type ErrHandleResult int
+
+const (
+	Success = ErrHandleResult(iota)
+	NotFound
+	DB_ERROR
+)
+
+// desc and extra for log
+func ErrorHandleAndLog(c *gin.Context, err error, treatNotFoundAsErr bool, desc string, extra interface{}) ErrHandleResult {
+	ctx := c.Request.Context()
 
 	if gorm.IsRecordNotFoundError(err) {
-		return true, true
+		if treatNotFoundAsErr {
+			// set gin error
+			log.For(ctx).Error("record not exist", zap.Error(err), zap.Any("extra", extra),
+				zap.String("desc", desc))
+
+			_ = c.Error(err).SetType(gin.ErrorTypePublic).
+				SetMeta(kerror.ErrNotFound.WithArgs(extra))
+		}
+		// not set gin error
+		return NotFound
+	} else if err != nil {
+		log.For(ctx).Error("operate db fail", zap.Error(err), zap.Any("extra", extra),
+			zap.String("desc", desc))
+
+		_ = c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(kerror.ErrInternalServerErrorGeneral)
+		return DB_ERROR
 	}
 
-	_ = c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(kerror.ErrInternalServerErrorGeneral)
-	return true, false
+	return Success
+
 }
 
 type ValuePair struct {
@@ -70,15 +92,15 @@ func ShouldUnique(c *gin.Context, ctx context.Context, db *gorm.DB, fieldMap map
 	// err := db.Where(queryStr, fieldVals...).First(&object).Error
 	db = db.Where(checkMap)
 	err := operate(db)
-	if hasErr, isNotFound := ApplyDBError(c, err); !hasErr {
+	if res := ErrorHandleAndLog(c, err, false,
+		"user unique check", checkMap); res == NotFound {
 		// already exist
 		log.For(ctx).Error("fields already exist", zap.Any("fields", checkMap))
 
 		_ = c.Error(kerror.EmptyError).SetType(gin.ErrorTypePublic).
 			SetMeta(kerror.ErrAlreadyExist.WithArgs(checkMap))
 		return false
-	} else if !isNotFound {
-		log.For(ctx).Error("query by fields fail", zap.Any("fields", checkMap), zap.Error(err))
+	} else if res != Success {
 		return false
 	}
 
