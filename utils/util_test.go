@@ -25,3 +25,7 @@ func TestDeepCopy(t *testing.T) {
 	t.Log(ti)
 	t.Log(tii)
 }
+
+func TestEscapeDoubleQuotes(t *testing.T) {
+	assert.Equal(t, `\"hello\"`, EscapeDoubleQuotes(`"hello"`))
+}

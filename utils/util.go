@@ -131,3 +131,7 @@ func BothZeroOrNot(v1, v2 interface{}) bool {
 func IsZeroOfUnderlyingType(x interface{}) bool {
 	return reflect.DeepEqual(x, reflect.Zero(reflect.TypeOf(x)).Interface())
 }
+
+func EscapeDoubleQuotes(str string) string {
+	return strings.ReplaceAll(str, `"`, `\"`)
+}

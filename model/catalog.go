@@ -1,23 +1,14 @@
 package model
 
 import (
-	"database/sql"
 	"time"
-
-	"github.com/guregu/null"
-)
-
-var (
-	_ = time.Second
-	_ = sql.LevelDefault
-	_ = null.Bool{}
 )
 
 type Catalog struct {
-	ID         int       `gorm:"column:id;primary_key" json:"id"`
-	CataName   string    `gorm:"column:cata_name" json:"cata_name"`
-	Desc       string    `gorm:"column:desc" json:"desc"`
-	CreateTime time.Time `gorm:"column:create_time" json:"create_time"`
+	ID        int       `gorm:"column:id;primary_key" json:"id"`
+	Name      string    `gorm:"column:name" json:"name"`
+	CreatedAt time.Time `gorm:"column:created_at" json:"-"`
+	UpdatedAt time.Time `gorm:"column:updated_at" json:"-"`
 }
 
 // TableName sets the insert table name for this struct type
