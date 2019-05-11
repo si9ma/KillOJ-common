@@ -170,9 +170,24 @@ var (
 		language.English.String(): "provider %v is not supported",
 	}
 
+	ForbiddenTip = Tip{
+		language.Chinese.String(): "禁止访问",
+		language.English.String(): "forbidden",
+	}
+
+	NotFoundTip = Tip{
+		language.Chinese.String(): "Not Found",
+		language.English.String(): "Not Found",
+	}
+
 	UnauthorizedGeneralTip = Tip{
 		language.Chinese.String(): "unauthorized",
 		language.English.String(): "unauthorized",
+	}
+
+	ShouldNotUpdateSelfTip = Tip{
+		language.Chinese.String(): "你不能更新自己的 %s",
+		language.English.String(): "you can't update %s of self",
 	}
 )
 

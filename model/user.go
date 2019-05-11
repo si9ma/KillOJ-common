@@ -9,6 +9,7 @@ type User struct {
 	Email        string    `gorm:"column:email" json:"email" binding:"required,email,max=50"`
 	CreatedAt    time.Time `gorm:"column:created_at" json:"-"`
 	UpdatedAt    time.Time `gorm:"column:updated_at" json:"-"`
+	Role         int       `gorm:"column:role" json:"-"`
 
 	// password from user input, password should't response to user,
 	// so set omitempty && set this field to nil before return
