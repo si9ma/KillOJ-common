@@ -13,7 +13,7 @@ type User struct {
 
 	// password from user input, password should't response to user,
 	// so set omitempty && set this field to nil before return
-	Passwd           string `gorm:"-" json:"password,omitempty" binding:"max=30,min=6"`
+	Password         string `gorm:"-" json:"password,omitempty" binding:"max=30"`
 	EncryptedPasswd  string `gorm:"column:passwd" json:"-"` // encrypted password in db
 	NickName         string `gorm:"column:nick_name" json:"nick_name" binding:"required,max=50"`
 	Signature        string `gorm:"column:signature" json:"signature" binding:"max=100"`

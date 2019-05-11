@@ -93,16 +93,16 @@ func ShouldUnique(c *gin.Context, ctx context.Context, db *gorm.DB, fieldMap map
 	db = db.Where(checkMap)
 	err := operate(db)
 	if res := ErrorHandleAndLog(c, err, false,
-		"user unique check", checkMap); res == NotFound {
+		"user unique check", checkMap); res == Success {
 		// already exist
 		log.For(ctx).Error("fields already exist", zap.Any("fields", checkMap))
 
 		_ = c.Error(kerror.EmptyError).SetType(gin.ErrorTypePublic).
 			SetMeta(kerror.ErrAlreadyExist.WithArgs(checkMap))
 		return false
-	} else if res != Success {
-		return false
+	} else if res == NotFound {
+		return true
 	}
 
-	return true
+	return false
 }
