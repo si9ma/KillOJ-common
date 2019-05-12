@@ -22,7 +22,8 @@ type User struct {
 	Site             string `gorm:"column:site" json:"site" binding:"max=50"`
 
 	// group
-	Groups []Group `gorm:"many2many:user_in_group;"`
+	Groups   []Group   `gorm:"many2many:user_in_group;" json:"-"`
+	Contests []Contest `gorm:"many2many:user_in_contest;" json:"-"`
 }
 
 // TableName sets the insert table name for this struct type

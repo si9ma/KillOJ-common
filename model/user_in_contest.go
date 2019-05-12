@@ -1,23 +1,15 @@
 package model
 
 import (
-	"database/sql"
 	"time"
-
-	"github.com/guregu/null"
-)
-
-var (
-	_ = time.Second
-	_ = sql.LevelDefault
-	_ = null.Bool{}
 )
 
 type UserInContest struct {
 	ID        int       `gorm:"column:id;primary_key" json:"id"`
 	ContestID int       `gorm:"column:contest_id" json:"contest_id"`
 	UserID    int       `gorm:"column:user_id" json:"user_id"`
-	JoinTime  time.Time `gorm:"column:join_time" json:"join_time"`
+	CreatedAt time.Time `gorm:"column:created_at" json:"-"`
+	UpdatedAt time.Time `gorm:"column:updated_at" json:"-"`
 }
 
 // TableName sets the insert table name for this struct type

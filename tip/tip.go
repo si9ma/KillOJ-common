@@ -87,12 +87,17 @@ var (
 
 	ValidateMaxTip = Tip{
 		language.Chinese.String(): "%v不能大于%v",
-		language.English.String(): "%v cannot be longer than %v",
+		language.English.String(): "%v cannot be greater than %v",
 	}
 
 	ValidateMinTip = Tip{
 		language.Chinese.String(): "%v必须大于%v",
-		language.English.String(): "%v must be longer than %v",
+		language.English.String(): "%v must be greater than %v",
+	}
+
+	ValidateGteTip = Tip{
+		language.Chinese.String(): "%v必须大于等于%v",
+		language.English.String(): "%v must be greater or equal than %v",
 	}
 
 	ValidateEmailTip = Tip{
@@ -198,6 +203,11 @@ var (
 	AlreadyInviteTip = Tip{
 		language.Chinese.String(): "已经邀请过",
 		language.English.String(): "already invited",
+	}
+
+	AlreadyFinishTip = Tip{
+		language.Chinese.String(): "已经结束",
+		language.English.String(): "already finished",
 	}
 )
 
