@@ -20,14 +20,14 @@ func TestBelongsTo(t *testing.T) {
 	}
 
 	var (
-		problem Problem
-		submit  Submit
+		user  User
+		group Group
 	)
 
-	db.First(&problem)
-	db.Model(&problem).Related(&submit)
-	t.Log(kjson.MarshalString(problem))
-	t.Log(kjson.MarshalString(submit))
+	db.First(&group)
+	db.Model(&group).Related(&user, "OwnerID")
+	t.Log(kjson.MarshalString(user))
+	t.Log(kjson.MarshalString(group))
 
 	var (
 		problem1 Problem

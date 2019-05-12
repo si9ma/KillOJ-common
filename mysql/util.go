@@ -3,6 +3,8 @@ package mysql
 import (
 	"context"
 
+	"github.com/si9ma/KillOJ-common/model"
+
 	"github.com/si9ma/KillOJ-common/utils"
 
 	"github.com/si9ma/KillOJ-backend/kerror"
@@ -29,14 +31,20 @@ const (
 )
 
 // desc and extra for log
-func ErrorHandleAndLog(c *gin.Context, err error, treatNotFoundAsErr bool, desc string, extra interface{}) ErrHandleResult {
+func ErrorHandleAndLog(c *gin.Context, err error, treatNotFoundAsErr bool, desc string, extra ...interface{}) ErrHandleResult {
 	ctx := c.Request.Context()
+
+	// get myself
+	myself, ok := utils.SafeGetUserFromJWT(c)
+	if !ok {
+		myself = model.User{}
+	}
 
 	if gorm.IsRecordNotFoundError(err) {
 		if treatNotFoundAsErr {
 			// set gin error
 			log.For(ctx).Error("record not exist", zap.Error(err), zap.Any("extra", extra),
-				zap.String("desc", desc))
+				zap.String("desc", desc), zap.Int("userID", myself.ID))
 
 			_ = c.Error(err).SetType(gin.ErrorTypePublic).
 				SetMeta(kerror.ErrNotFound.WithArgs(extra))
@@ -45,14 +53,13 @@ func ErrorHandleAndLog(c *gin.Context, err error, treatNotFoundAsErr bool, desc 
 		return NotFound
 	} else if err != nil {
 		log.For(ctx).Error("operate db fail", zap.Error(err), zap.Any("extra", extra),
-			zap.String("desc", desc))
+			zap.String("desc", desc), zap.Int("userID", myself.ID))
 
 		_ = c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(kerror.ErrInternalServerErrorGeneral)
 		return DB_ERROR
 	}
 
 	return Success
-
 }
 
 type ValuePair struct {

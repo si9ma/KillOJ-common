@@ -5,6 +5,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/si9ma/KillOJ-common/tracing"
 
 	"github.com/opentracing/opentracing-go"
@@ -65,7 +67,20 @@ func TestRedisOpenTracing(t *testing.T) {
 	log.For(ctx).Info("info")
 	log.For(ctx).Error("error")
 
-	rclient := WrapRedisClient(ctx, client)
+	rclient := WrapRedisClusterClient(ctx, client)
 	rclient.Set("test", "test", time.Minute)
 	rclient.Get("test")
+}
+
+func TestGetTestRedis(t *testing.T) {
+	client, err := GetTestRedis()
+	if err != nil {
+		t.Fatal(err)
+	}
+	client.Set("test", "test", time.Minute)
+	if res, err := client.Get("test").Result(); err != nil {
+		t.Fatal()
+	} else {
+		assert.Equal(t, "test", res)
+	}
 }

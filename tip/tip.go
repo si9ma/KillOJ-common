@@ -145,6 +145,11 @@ var (
 		language.English.String(): "%v not exist",
 	}
 
+	NotExistOrOutOfDateTip = Tip{
+		language.Chinese.String(): "%v 不存在或已经过期",
+		language.English.String(): "%v not exist or already invalid",
+	}
+
 	UserNotExistTip = Tip{
 		language.Chinese.String(): "用户 %v 不存在",
 		language.English.String(): "user %v not exist",
@@ -188,6 +193,11 @@ var (
 	ShouldNotUpdateSelfTip = Tip{
 		language.Chinese.String(): "你不能更新自己的 %s",
 		language.English.String(): "you can't update %s of self",
+	}
+
+	AlreadyInviteTip = Tip{
+		language.Chinese.String(): "已经邀请过",
+		language.English.String(): "already invited",
 	}
 )
 

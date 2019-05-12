@@ -15,3 +15,6 @@ const GoFile = "main.go"
 const CFile = "main.c"
 const CppFile = "main.cpp"
 const ExeFile = "Main"
+
+// jwt
+const JwtIdentityKey = "id"

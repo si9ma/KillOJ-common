@@ -20,6 +20,9 @@ type User struct {
 	NoInOrganization string `gorm:"column:no_in_organization" json:"no_in_organization" binding:"max=30"`
 	Organization     string `gorm:"column:organization" json:"organization" binding:"max=50"`
 	Site             string `gorm:"column:site" json:"site" binding:"max=50"`
+
+	// group
+	Groups []Group `gorm:"many2many:user_in_group;"`
 }
 
 // TableName sets the insert table name for this struct type
