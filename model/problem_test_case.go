@@ -1,5 +1,18 @@
 package model
 
+import (
+	"database/sql"
+	"time"
+
+	"github.com/guregu/null"
+)
+
+var (
+	_ = time.Second
+	_ = sql.LevelDefault
+	_ = null.Bool{}
+)
+
 type ProblemTestCase struct {
 	ID             int    `gorm:"column:id;primary_key" json:"id"`
 	ProblemID      int    `gorm:"column:problem_id" json:"problem_id"`

@@ -13,9 +13,9 @@ type User struct {
 
 	// password from user input, password should't response to user,
 	// so set omitempty && set this field to nil before return
-	Password         string `gorm:"-" json:"password,omitempty" binding:"max=30"`
+	Password         string `gorm:"-" json:"password,omitempty" binding:"omitempty,min=6,max=30"`
 	EncryptedPasswd  string `gorm:"column:passwd" json:"-"` // encrypted password in db
-	NickName         string `gorm:"column:nick_name" json:"nick_name" binding:"required,max=50"`
+	NickName         string `gorm:"column:nick_name" json:"nick_name" binding:"required,max=50,excludesall=!@#?"`
 	Signature        string `gorm:"column:signature" json:"signature" binding:"max=100"`
 	NoInOrganization string `gorm:"column:no_in_organization" json:"no_in_organization" binding:"max=30"`
 	Organization     string `gorm:"column:organization" json:"organization" binding:"max=50"`

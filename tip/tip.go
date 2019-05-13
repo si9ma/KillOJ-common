@@ -90,6 +90,16 @@ var (
 		language.English.String(): "%v cannot be greater than %v",
 	}
 
+	ExcludeTip = Tip{
+		language.Chinese.String(): "%v中不允许包含%v",
+		language.English.String(): "%v shouldn't contains %v",
+	}
+
+	OneOfTip = Tip{
+		language.Chinese.String(): "%v 只能是(%v)中的值",
+		language.English.String(): "the value of (%v) must in %v",
+	}
+
 	ValidateMinTip = Tip{
 		language.Chinese.String(): "%v必须大于%v",
 		language.English.String(): "%v must be greater than %v",

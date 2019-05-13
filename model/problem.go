@@ -5,19 +5,22 @@ import (
 )
 
 type Problem struct {
-	ID              int       `gorm:"column:id;primary_key" json:"id"`
-	CreateAt        time.Time `gorm:"column:create_at" json:"create_at"`
-	UpdateAt        time.Time `gorm:"column:update_at" json:"update_at"`
-	Desc            string    `gorm:"column:desc" json:"desc"`
-	TimeLimit       int       `gorm:"column:time_limit" json:"time_limit"`
-	MemoryLimit     int       `gorm:"column:memory_limit" json:"memory_limit"`
-	DifficultyCata  int       `gorm:"column:difficulty_cata" json:"difficulty_cata"`
-	Difficulty      int       `gorm:"column:difficulty" json:"difficulty"`
-	Private         int       `gorm:"column:private" json:"private"`
-	BelongTo        int       `gorm:"column:belong_to" json:"belong_to"`
-	BelongType      int       `gorm:"column:belong_type" json:"belong_type"`
-	CatalogID       int       `gorm:"column:catalog_id" json:"catalog_id"`
-	ProblemTestCase []ProblemTestCase
+	ID          int       `gorm:"column:id;primary_key" json:"id"`
+	Name        string    `gorm:"column:name" json:"name" binding:"required,max=100"`
+	CreatedAt   time.Time `gorm:"column:created_at" json:"-"`
+	UpdatedAt   time.Time `gorm:"column:updated_at" json:"-"`
+	OwnerID     int       `gorm:"column:owner_id" json:"owner_id"`
+	Desc        string    `gorm:"column:desc" json:"desc"`
+	Input       string    `gorm:"column:input" json:"input"`
+	Output      string    `gorm:"column:output" json:"output"`
+	Hint        string    `gorm:"column:hint" json:"hint"`
+	Source      string    `gorm:"column:source" json:"source" binding:"max=100"`
+	TimeLimit   int       `gorm:"column:time_limit" json:"time_limit" binding:"required,min=100,max=180000"`     // min = 100ms,max=3 minute
+	MemoryLimit int       `gorm:"column:memory_limit" json:"memory_limit" binding:"required,min=100,max=204800"` // min = 100KB`,max = 200MB
+	Difficulty  int       `gorm:"column:difficulty" json:"difficulty" binding:"required"`
+	IsPublic    bool      `gorm:"column:is_public" json:"is_public"`
+	CatalogID   int       `gorm:"column:catalog_id" json:"catalog_id"`
+	Tags        []string  `gorm:"-" json:"tags"`
 }
 
 // TableName sets the insert table name for this struct type

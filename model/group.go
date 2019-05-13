@@ -9,6 +9,7 @@ type Group struct {
 	CreatedAt time.Time `gorm:"column:created_at" json:"-"`
 	UpdatedAt time.Time `gorm:"column:updated_at" json:"-"`
 	Users     []User    `gorm:"many2many:user_in_group;" json:"-"`
+	Problems  []Problem `gorm:"many2many:problem_in_group;" json:"-"`
 }
 
 // TableName sets the insert table name for this struct type
