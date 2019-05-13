@@ -5,26 +5,28 @@ import (
 	"time"
 )
 
-type Tag struct {
+type ProblemSample struct {
 	ID        int       `gorm:"column:id;primary_key" json:"id"`
-	Name      string    `gorm:"column:name" json:"name" binding:"required,min=1,max=50"`
+	ProblemID int       `gorm:"column:problem_id" json:"-"`
 	CreatedAt time.Time `gorm:"column:created_at" json:"-"`
 	UpdatedAt time.Time `gorm:"column:updated_at" json:"-"`
+	Input     string    `gorm:"column:input" json:"input" binding:"required"`
+	Output    string    `gorm:"column:output" json:"output" binding:"required"`
 	DeleteIt  bool      `gorm:"-" json:"delete_it,omitempty"`
 }
 
 // TableName sets the insert table name for this struct type
-func (t *Tag) TableName() string {
-	return "tag"
+func (p *ProblemSample) TableName() string {
+	return "problem_sample"
 }
 
 // ignore delete_it
-func (t *Tag) MarshalJSON() ([]byte, error) {
-	type TagAlias Tag
+func (p *ProblemSample) MarshalJSON() ([]byte, error) {
+	type SampleAlias ProblemSample
 	return json.Marshal(&struct {
-		*TagAlias
+		*SampleAlias
 		DeleteIt bool `json:"delete_it,omitempty"`
 	}{
-		TagAlias: (*TagAlias)(t),
+		SampleAlias: (*SampleAlias)(p),
 	})
 }

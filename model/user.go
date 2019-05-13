@@ -1,10 +1,13 @@
 package model
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type User struct {
 	ID           int       `gorm:"column:id;primary_key" json:"id"`
-	GithubUserID string    `gorm:"column:github_user_id" json:"github_user_id"`
+	GithubUserID string    `gorm:"column:github_user_id" json:"github_user_id,omitempty"`
 	GithubName   string    `gorm:"column:github_name" json:"github_name"`
 	Email        string    `gorm:"column:email" json:"email" binding:"required,email,max=50"`
 	CreatedAt    time.Time `gorm:"column:created_at" json:"-"`
@@ -30,3 +33,23 @@ type User struct {
 func (u *User) TableName() string {
 	return "user"
 }
+
+// ignore password and github user id
+func (u *User) MarshalJSON() ([]byte, error) {
+	type UserAlias User
+	return json.Marshal(&struct {
+		*UserAlias
+		Password     string `json:"password,omitempty"`
+		GithubUserID string `json:"github_user_id,omitempty"`
+	}{
+		UserAlias: (*UserAlias)(u),
+	})
+}
+
+type Role int
+
+const (
+	Administrator = Role(iota)
+	Maintainer
+	Normal
+)
