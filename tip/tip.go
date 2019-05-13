@@ -219,6 +219,11 @@ var (
 		language.Chinese.String(): "已经结束",
 		language.English.String(): "already finished",
 	}
+
+	MustProvideWhenAnotherExistTip = Tip{
+		language.Chinese.String(): "当 %s 存在时, %s 不能为空",
+		language.English.String(): "when %s not empty, %s alse must not empty",
+	}
 )
 
 func (t Tip) String() string {

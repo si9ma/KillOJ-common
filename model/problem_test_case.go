@@ -1,23 +1,11 @@
 package model
 
-import (
-	"database/sql"
-	"time"
-
-	"github.com/guregu/null"
-)
-
-var (
-	_ = time.Second
-	_ = sql.LevelDefault
-	_ = null.Bool{}
-)
-
 type ProblemTestCase struct {
 	ID             int    `gorm:"column:id;primary_key" json:"id"`
-	ProblemID      int    `gorm:"column:problem_id" json:"problem_id"`
-	InputData      string `gorm:"column:input_data" json:"input_data"`
-	ExpectedOutput string `gorm:"column:expected_output" json:"expected_output"`
+	ProblemID      int    `gorm:"column:problem_id" json:"-"`
+	InputData      string `gorm:"column:input_data" json:"input_data" binding:"required"`
+	ExpectedOutput string `gorm:"column:expected_output" json:"expected_output" binding:"required"`
+	DeleteIt       bool   `gorm:"-" json:"delete_it,omitempty"`
 }
 
 // TableName sets the insert table name for this struct type
