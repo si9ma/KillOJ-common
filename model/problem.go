@@ -21,9 +21,9 @@ type Problem struct {
 	BelongType       BelongType        `gorm:"column:belong_type" json:"belong_type" binding:"exists,oneof=0 1 2"`
 	BelongToID       int               `gorm:"column:belong_to_id" json:"belong_to_id"`
 	CatalogID        int               `gorm:"column:catalog_id" json:"catalog_id" binding:"required"`
-	Tags             []Tag             `gorm:"many2many:problem_has_tag;" json:"tags"`
-	ProblemSamples   []ProblemSample   `json:"samples"`
-	ProblemTestCases []ProblemTestCase `json:"test_cases" binding:"required"`
+	Tags             []Tag             `gorm:"many2many:problem_has_tag;" json:"tags" binding:"dive"`
+	ProblemSamples   []ProblemSample   `json:"samples" binding:"dive"`
+	ProblemTestCases []ProblemTestCase `json:"test_cases" binding:"required,dive"`
 }
 
 // TableName sets the insert table name for this struct type

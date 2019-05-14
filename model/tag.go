@@ -6,7 +6,7 @@ import (
 )
 
 type Tag struct {
-	ID        int       `gorm:"column:id;primary_key" json:"id"`
+	ID        int       `gorm:"column:id;primary_key" json:"id" binding:"requiredwhenfield=DeleteIt"`
 	Name      string    `gorm:"column:name" json:"name" binding:"required,min=1,max=50"`
 	CreatedAt time.Time `gorm:"column:created_at" json:"-"`
 	UpdatedAt time.Time `gorm:"column:updated_at" json:"-"`

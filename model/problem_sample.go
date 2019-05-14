@@ -6,7 +6,7 @@ import (
 )
 
 type ProblemSample struct {
-	ID        int       `gorm:"column:id;primary_key" json:"id"`
+	ID        int       `gorm:"column:id;primary_key" json:"id" binding:"requiredwhenfield=DeleteIt"`
 	ProblemID int       `gorm:"column:problem_id" json:"-"`
 	CreatedAt time.Time `gorm:"column:created_at" json:"-"`
 	UpdatedAt time.Time `gorm:"column:updated_at" json:"-"`

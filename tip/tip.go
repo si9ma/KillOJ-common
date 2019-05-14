@@ -100,6 +100,11 @@ var (
 		language.English.String(): "the value of (%v) must in %v",
 	}
 
+	RequiredWhenFieldNotEmptyTip = Tip{
+		language.Chinese.String(): "当 %s 不为空时, %s 不能为空",
+		language.English.String(): "when %s not empty, %s also must not empty",
+	}
+
 	ValidateMinTip = Tip{
 		language.Chinese.String(): "%v必须大于%v",
 		language.English.String(): "%v must be greater than %v",
