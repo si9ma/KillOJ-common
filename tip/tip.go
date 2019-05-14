@@ -195,6 +195,11 @@ var (
 		language.English.String(): "provider %v is not supported",
 	}
 
+	HaveRunningTaskTip = Tip{
+		language.Chinese.String(): "已经有正在运行中的提交，请等待提交完成后，再提交!",
+		language.English.String(): "already have running submit, please wait it to complete!",
+	}
+
 	ForbiddenTip = Tip{
 		language.Chinese.String(): "禁止访问",
 		language.English.String(): "forbidden",
@@ -228,6 +233,11 @@ var (
 	MustProvideWhenAnotherExistTip = Tip{
 		language.Chinese.String(): "当 %s 存在时, %s 不能为空",
 		language.English.String(): "when %s not empty, %s alse must not empty",
+	}
+
+	TaskNotCompleteTip = Tip{
+		language.Chinese.String(): "任务还没有结束",
+		language.English.String(): "task haven't complete",
 	}
 )
 

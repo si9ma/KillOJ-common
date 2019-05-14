@@ -1,7 +1,6 @@
 package judge
 
 import (
-	"github.com/si9ma/KillOJ-common/lang"
 	"github.com/si9ma/KillOJ-common/tip"
 )
 
@@ -105,11 +104,8 @@ var errAdapterMapping = map[int64]errAdapter{
 
 // return empty string when don't exist
 func GetInnerErrorMsgByErrNo(errno int64) string {
-	lan := lang.GetLangFromEnv()
 	if adapter, ok := errAdapterMapping[errno]; ok {
-		if val, ok := adapter.InnerMsg[lan]; ok {
-			return val
-		}
+		return adapter.InnerMsg.String()
 	}
 
 	return ""
@@ -117,11 +113,8 @@ func GetInnerErrorMsgByErrNo(errno int64) string {
 
 // return empty string when don't exist
 func GetOuterErrorMsgByErrNo(errno int64) string {
-	lan := lang.GetLangFromEnv()
 	if adapter, ok := errAdapterMapping[errno]; ok {
-		if val, ok := adapter.OuterMsg[lan]; ok {
-			return val
-		}
+		return adapter.OuterMsg.String()
 	}
 
 	return ""
