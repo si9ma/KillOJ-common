@@ -53,3 +53,12 @@ const (
 	Maintainer
 	Normal
 )
+
+type UserWithOnlyID struct {
+	ID int `gorm:"column:id;primary_key" json:"id"`
+}
+
+// TableName sets the insert table name for this struct type
+func (u *UserWithOnlyID) TableName() string {
+	return "user"
+}

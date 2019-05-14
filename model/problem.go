@@ -7,8 +7,8 @@ import (
 type Problem struct {
 	ID               int               `gorm:"column:id;primary_key" json:"id"`
 	Name             string            `gorm:"column:name" json:"name" binding:"required,max=100"`
-	CreatedAt        time.Time         `gorm:"column:created_at" json:"-"`
-	UpdatedAt        time.Time         `gorm:"column:updated_at" json:"-"`
+	CreatedAt        time.Time         `gorm:"column:created_at" json:"created_at"`
+	UpdatedAt        time.Time         `gorm:"column:updated_at" json:"updated_at"`
 	OwnerID          int               `gorm:"column:owner_id" json:"owner_id"`
 	Desc             string            `gorm:"column:desc" json:"desc" binding:"required"`
 	Input            string            `gorm:"column:input" json:"input" binding:"required"`
@@ -23,7 +23,9 @@ type Problem struct {
 	CatalogID        int               `gorm:"column:catalog_id" json:"catalog_id" binding:"required"`
 	Tags             []Tag             `gorm:"many2many:problem_has_tag;" json:"tags" binding:"dive"`
 	ProblemSamples   []ProblemSample   `json:"samples" binding:"dive"`
-	ProblemTestCases []ProblemTestCase `json:"test_cases" binding:"required,dive"`
+	ProblemTestCases []ProblemTestCase `json:"test_cases,omitempty" binding:"required,dive"`
+	UpVoteUsers      []UserWithOnlyID  `gorm:"many2many:user_vote_problem;association_jointable_foreignkey:user_id;" json:"up_vote_users"`
+	DownVoteUsers    []UserWithOnlyID  `gorm:"many2many:user_vote_problem;association_jointable_foreignkey:user_id;" json:"down_vote_users"`
 }
 
 // TableName sets the insert table name for this struct type
