@@ -26,6 +26,7 @@ type Problem struct {
 	ProblemTestCases []ProblemTestCase `json:"test_cases,omitempty" binding:"required,dive"`
 	UpVoteUsers      []UserWithOnlyID  `gorm:"many2many:user_vote_problem;association_jointable_foreignkey:user_id;" json:"up_vote_users"`
 	DownVoteUsers    []UserWithOnlyID  `gorm:"many2many:user_vote_problem;association_jointable_foreignkey:user_id;" json:"down_vote_users"`
+	Comments         []Comment         `json:"comments"`
 }
 
 // TableName sets the insert table name for this struct type
