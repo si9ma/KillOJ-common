@@ -6,7 +6,8 @@ const ProjectName = "KillOJ"
 const DefaultLang = "en"
 
 // redis
-const SubmitStatusKeyPrefix = "submit_status_"
+const SubmitStatusKeyPrefix = "killoj_submit_status_"
+const UserProblemSubmitIsCompletePrefix = "killoj_user_problem_submit_is_complete_"
 const SubmitStatusTimeout = time.Hour // 1 hour
 
 // sandbox

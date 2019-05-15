@@ -15,7 +15,7 @@ type Submit struct {
 	Result      int       `gorm:"column:result" json:"result"`
 	RunTime     int       `gorm:"column:run_time" json:"run_time"`
 	MemoryUsage int       `gorm:"column:memory_usage" json:"memory_usage"`
-	IsComplete  int       `gorm:"column:is_complete" json:"is_complete"`
+	IsComplete  bool      `gorm:"column:is_complete" json:"is_complete"`
 	Problem     Problem   `json:"-"`
 }
 
