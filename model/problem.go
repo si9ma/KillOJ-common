@@ -21,12 +21,14 @@ type Problem struct {
 	BelongType       BelongType        `gorm:"column:belong_type" json:"belong_type" binding:"exists,oneof=0 1 2"`
 	BelongToID       int               `gorm:"column:belong_to_id" json:"belong_to_id"`
 	CatalogID        int               `gorm:"column:catalog_id" json:"catalog_id" binding:"required"`
+	Catalog          Catalog           `json:"catalog" binding:"-"`
 	Tags             []Tag             `gorm:"many2many:problem_has_tag;" json:"tags" binding:"dive"`
 	ProblemSamples   []ProblemSample   `json:"samples" binding:"dive"`
 	ProblemTestCases []ProblemTestCase `json:"test_cases,omitempty" binding:"required,dive"`
 	UpVoteUsers      []UserWithOnlyID  `gorm:"many2many:user_vote_problem;association_jointable_foreignkey:user_id;" json:"up_vote_users"`
 	DownVoteUsers    []UserWithOnlyID  `gorm:"many2many:user_vote_problem;association_jointable_foreignkey:user_id;" json:"down_vote_users"`
 	Comments         []Comment         `json:"comments"`
+	Owner     User      `json:"owner" gorm:"foreignkey:OwnerID;association_autoupdate:false;association_autocreate:false" binding:"-"`
 }
 
 // TableName sets the insert table name for this struct type
